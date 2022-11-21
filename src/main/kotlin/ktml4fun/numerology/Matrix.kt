@@ -2,7 +2,7 @@ package ktml4fun.numerology
 
 class Matrix private constructor(
     numberOfRows: Int,
-    numberOfColumns: Int,
+    numberOfColumns: Int
 ) {
     val rows: Int = numberOfRows
     val cols: Int = numberOfColumns
@@ -97,10 +97,10 @@ class Matrix private constructor(
     }
 
     override fun equals(other: Any?): Boolean {
-        return other is Matrix
-                && this.rows == other.rows
-                && this.cols == other.cols
-                && this.entries.contentEquals(other.entries)
+        return other is Matrix &&
+            this.rows == other.rows &&
+            this.cols == other.cols &&
+            this.entries.contentEquals(other.entries)
     }
 
     fun kotlinHashCode(): Int {
@@ -135,4 +135,3 @@ class Matrix private constructor(
         }
     }
 }
-
