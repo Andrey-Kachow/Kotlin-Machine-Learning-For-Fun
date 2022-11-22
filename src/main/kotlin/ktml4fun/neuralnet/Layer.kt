@@ -1,4 +1,16 @@
-package ktml4fun.neuralnet;
+package ktml4fun.neuralnet
 
-public class Layer {
+import ktml4fun.numerology.Matrix
+
+class Layer(size: Int) {
+
+    val bias: Matrix = Matrix.columnVector(size)
+
+    fun forward() {
+        TODO()
+    }
+
+    fun backward() {
+        TODO()
+    }
 }

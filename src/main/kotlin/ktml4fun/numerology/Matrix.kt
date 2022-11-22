@@ -37,6 +37,22 @@ class Matrix private constructor(
         }
     }
 
+    fun map(transform: (Float) -> Float): Matrix {
+        return Matrix(cols, rows).also {
+            forEachIndexed { row, col, value ->
+                it[row, col] = transform(value)
+            }
+        }
+    }
+
+    fun sumOf(transform: (Float) -> Float): Float {
+        return map(transform).sum()
+    }
+
+    private fun sum(): Float {
+        return entries.sum()
+    }
+
     fun transpose(): Matrix {
         return Matrix(cols, rows).also {
             forEachIndexed { row, col, value ->
@@ -126,12 +142,20 @@ class Matrix private constructor(
             return Matrix(numberOfRows, numberOfColumns)
         }
 
-        fun ofValues(vararg values: Float): Matrix {
+        fun of(vararg values: Float): Matrix {
             return Matrix(values.size, 1).apply {
                 values.forEachIndexed { index, value ->
                     entries[index] = value
                 }
             }
+        }
+
+        fun columnVector(size: Int): Matrix {
+            return Matrix(size, 1)
+        }
+
+        fun columnVector(vararg values: Float): Matrix {
+            return of(*values).resizedAs(values.size, 1)
         }
     }
 }
