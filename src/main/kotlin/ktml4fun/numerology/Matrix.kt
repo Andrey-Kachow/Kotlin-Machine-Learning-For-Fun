@@ -23,9 +23,7 @@ class Matrix private constructor(
         }
     }
 
-    operator fun get(row: Int, col: Int): Float {
-        return entries[row * cols + col]
-    }
+    operator fun get(row: Int, col: Int): Float = entries[row * cols + col]
 
     operator fun set(row: Int, col: Int, value: Float) {
         entries[row * cols + col] = value
@@ -45,13 +43,9 @@ class Matrix private constructor(
         }
     }
 
-    fun sumOf(transform: (Float) -> Float): Float {
-        return map(transform).sum()
-    }
+    fun sumOf(transform: (Float) -> Float): Float = map(transform).sum()
 
-    private fun sum(): Float {
-        return entries.sum()
-    }
+    private fun sum(): Float = entries.sum()
 
     fun transpose(): Matrix {
         return Matrix(cols, rows).also {
@@ -73,13 +67,13 @@ class Matrix private constructor(
         }
     }
 
-    fun plus(other: Matrix): Matrix {
-        return elementWiseBinaryOperationWith(other) { x, y -> x + y }
-    }
+    operator fun plus(other: Matrix): Matrix =
+        elementWiseBinaryOperationWith(other) { x, y -> x + y }
 
-    fun minus(other: Matrix): Matrix {
-        return elementWiseBinaryOperationWith(other) { x, y -> x - y }
-    }
+    operator fun minus(other: Matrix): Matrix =
+        elementWiseBinaryOperationWith(other) { x, y -> x - y }
+
+    operator fun unaryMinus(): Matrix = map { -it }
 
     private fun matrixMultiplyBy(other: Matrix): Matrix {
         require(this.cols == other.rows)
@@ -95,17 +89,14 @@ class Matrix private constructor(
         }
     }
 
-    infix fun o(other: Matrix): Matrix {
-        return matrixMultiplyBy(other)
-    }
+    fun elementWiseMultiplyBy(other: Matrix): Matrix =
+        elementWiseBinaryOperationWith(other) { x, y -> x * y }
 
-    fun elementWiseMultiplyBy(other: Matrix): Matrix {
-        return elementWiseBinaryOperationWith(other) { x, y -> x * y }
-    }
+    infix fun x(other: Matrix): Matrix = matrixMultiplyBy(other)
 
-    fun copy(): Matrix {
-        return Matrix(rows, cols, entries)
-    }
+    infix fun o(other: Matrix): Matrix = elementWiseMultiplyBy(other)
+
+    fun copy(): Matrix = Matrix(rows, cols, entries)
 
     fun resizedAs(numberOfRows: Int, numberOfColumns: Int): Matrix {
         require(numberOfRows * numberOfColumns == rows * cols)
@@ -119,28 +110,12 @@ class Matrix private constructor(
             this.entries.contentEquals(other.entries)
     }
 
-    fun kotlinHashCode(): Int {
-        val hashMagic = 31
-        return rows
-            .let {
-                hashMagic * it + cols
-            }.let {
-                hashMagic * it * entries.contentHashCode()
-            }
-    }
-
-    override fun hashCode(): Int {
-        val hashMagic = 31
-        var result = rows
-        result = hashMagic * result + cols
-        result = hashMagic * result + entries.contentHashCode()
-        return result
-    }
+    override fun hashCode(): Int =
+        31 * (31 * rows + cols) * entries.contentHashCode()
 
     companion object {
-        fun empty(numberOfRows: Int, numberOfColumns: Int): Matrix {
-            return Matrix(numberOfRows, numberOfColumns)
-        }
+        fun ofSize(numberOfRows: Int, numberOfColumns: Int): Matrix =
+            Matrix(numberOfRows, numberOfColumns)
 
         fun of(vararg values: Float): Matrix {
             return Matrix(values.size, 1).apply {
@@ -150,9 +125,7 @@ class Matrix private constructor(
             }
         }
 
-        fun columnVector(size: Int): Matrix {
-            return Matrix(size, 1)
-        }
+        fun columnVector(size: Int): Matrix = Matrix(size, 1)
 
         fun columnVector(vararg values: Float): Matrix {
             return of(*values).resizedAs(values.size, 1)
