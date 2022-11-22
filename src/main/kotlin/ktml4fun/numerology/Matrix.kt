@@ -45,7 +45,7 @@ class Matrix private constructor(
 
     fun sumOf(transform: (Float) -> Float): Float = map(transform).sum()
 
-    private fun sum(): Float = entries.sum()
+    fun sum(): Float = entries.sum()
 
     fun transpose(): Matrix {
         return Matrix(cols, rows).also {
@@ -72,6 +72,10 @@ class Matrix private constructor(
 
     operator fun minus(other: Matrix): Matrix =
         elementWiseBinaryOperationWith(other) { x, y -> x - y }
+
+    operator fun minus(scalar: Float): Matrix = map { it - scalar }
+
+    operator fun times(scalar: Float): Matrix = map { it * scalar }
 
     operator fun unaryMinus(): Matrix = map { -it }
 
@@ -114,6 +118,8 @@ class Matrix private constructor(
         31 * (31 * rows + cols) * entries.contentHashCode()
 
     companion object {
+        val empty = ::ofSize
+
         fun ofSize(numberOfRows: Int, numberOfColumns: Int): Matrix =
             Matrix(numberOfRows, numberOfColumns)
 
@@ -132,3 +138,5 @@ class Matrix private constructor(
         }
     }
 }
+
+operator fun Float.times(matrix: Matrix): Matrix = matrix * this
