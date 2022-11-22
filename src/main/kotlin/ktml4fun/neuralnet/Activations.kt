@@ -1,12 +1,13 @@
 package ktml4fun.neuralnet
 
 import ktml4fun.numerology.Matrix
-import kotlin.math.PI
 import kotlin.math.exp
 import kotlin.math.max
 import kotlin.math.pow
 import kotlin.math.sqrt
 import kotlin.math.tanh
+
+const val PI_F = 3.1415927F
 
 typealias ActivationFunction = (x: Float) -> Float
 
@@ -79,9 +80,8 @@ class SwishActivation : ActivationFunction {
 }
 
 class GaussianErrorLinearUnitActivation : ActivationFunction {
-    override fun invoke(x: Float): Float = (
-        0.5F * x * (1.0F * tanh(sqrt(2.0F / PI) * (x * 0.044715F * x.pow(3))))
-        ).toFloat()
+    override fun invoke(x: Float): Float =
+        0.5F * x * (1F + tanh(sqrt(2F / PI_F) * (x * 0.044715F * x.pow(3F))))
 }
 
 class ScaledExponentialLinearUnit(
