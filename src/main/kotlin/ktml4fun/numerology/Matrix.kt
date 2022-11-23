@@ -119,7 +119,7 @@ class Matrix private constructor(
 
     /**
      * returns Matrix representation in desired form. For example:
-     *
+     * ```
      * Matrix(3x3) {
      *     1 2 3
      *     4 5 6
