@@ -117,6 +117,28 @@ class Matrix private constructor(
     override fun hashCode(): Int =
         31 * (31 * rows + cols) * entries.contentHashCode()
 
+    /**
+     * returns Matrix representation in desired form. For example:
+     *
+     * Matrix(3x3) {
+     *     1 2 3
+     *     4 5 6
+     *     7 8 9
+     * }
+     */
+    override fun toString(): String {
+        val sb = StringBuilder("Matrix(${rows}x$cols) {\n")
+        for (i in 0 until rows) {
+            sb.append("\t")
+            for (j in 0 until cols) {
+                sb.append("${get(i, j)} ")
+            }
+            sb.append("\n")
+        }
+        sb.append("}\n")
+        return sb.toString()
+    }
+
     companion object {
         val empty = ::ofSize
 
